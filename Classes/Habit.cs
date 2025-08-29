@@ -5,7 +5,12 @@ namespace HabitTrackerApp.Classes
     public class Habit
     {
         public string Name { get; set; }
+
         public List<DateTime> CompletionDates { get; set; } = new List<DateTime>();
+
+        public int CurrentStreak { get; set; }
+
+        public int MaxStreak { get; set; }
 
         public Habit(string name)
         {
@@ -15,18 +20,18 @@ namespace HabitTrackerApp.Classes
         public void MarkComplete()
         {
             DateTime today = DateTime.Today;
-            if (!CompletionDates.Contains(today))
-            {
-                CompletionDates.Add(today);
-                Console.WriteLine(string.Format(LocalizationService.GetString("HabitMarkedComplete"), Name, today.ToShortDateString()));
-            }
-            else
+            if (CompletionDates.Contains(today))
             {
                 Console.WriteLine(LocalizationService.GetString("HabitAlreadyCompletedToday"));
+                return;
             }
+
+            CompletionDates.Add(today);
+            Console.WriteLine(string.Format(LocalizationService.GetString("HabitMarkedComplete"), Name, today.ToShortDateString()));
+            CalculateCurrentStreak();
         }
 
-        public int CurrentStreak()
+        private void CalculateCurrentStreak()
         {
             CompletionDates.Sort((a, b) => b.CompareTo(a)); // newest first
             int streak = 0;
@@ -39,13 +44,18 @@ namespace HabitTrackerApp.Classes
                     streak++;
                     day = day.AddDays(-1);
                 }
-                else
-                {
-                    break;
-                }
             }
 
-            return streak;
+            CurrentStreak = streak;
+            if (CurrentStreak > MaxStreak)
+            {
+                MaxStreak = CurrentStreak;
+            }
+        }
+
+        public void ResetCurrentStreak()
+        {
+            CurrentStreak = 0;
         }
 
         public void ShowHistory()

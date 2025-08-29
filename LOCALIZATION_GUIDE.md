@@ -53,15 +53,18 @@ Below is an example based on the existing [`en.json`](Resources/Localizations/en
   "MenuMarkComplete": "3. Mark Habit Complete",
   "MenuViewHistory": "4. View Habit History",
   "MenuDeleteHabit": "5. Delete Habit",
-  "MenuSetReminders": "6. Set Email Reminders",
-  "MenuChangeLanguage": "7. Change Language",
-  "MenuExit": "8. Exit",
+  "MenuResetHabit": "6. Reset Habit",
+  "MenuSetReminders": "7. Set Email Reminders",
+  "MenuChangeLanguage": "8. Change Language",
+  "MenuToggleTheme": "9. Toggle Theme",
+  "MenuSyncCalendar": "10. Sync Google Calendar",
+  "MenuExit": "11. Exit",
   "InvalidOption": "❗ Invalid option.",
   "EnterHabitName": "Enter habit name: ",
   "AddedHabit": "➕ Added habit: {0}",
   "NoHabitsYet": "No habits yet.",
   "YourHabits": "📋 Your Habits:",
-  "HabitLineFormat": "{0}. {1} - Current streak: {2}",
+  "HabitLineFormat": "{0}. {1} - Current streak: {2} {3} - Max streak: {4}",
   "SelectHabitComplete": "Select habit number to mark complete: ",
   "InvalidHabitNumber": "❌ Invalid habit number.",
   "SelectHabitHistory": "Select habit number to view history: ",
@@ -82,7 +85,11 @@ Below is an example based on the existing [`en.json`](Resources/Localizations/en
   "HabitMarkedComplete": "✅ «{0}» marked as complete for {1}.",
   "HabitAlreadyCompletedToday": "⚠️ You've already marked this habit complete today.",
   "HabitHistoryFor": "📅 History for «{0}»:",
-  "HabitHistoryDateLine": "- {0}"
+  "HabitHistoryDateLine": "- {0}",
+  "SelectHabitReset": "Select habit number to reset: ",
+  "ConfirmReset": "Are you sure you want to reset habit {0}",
+  "ResetedHabit": "❌ Reseted habit: {0}",
+  "ResetCancelled": "Reset habit cancelled."
 }
 ```
 

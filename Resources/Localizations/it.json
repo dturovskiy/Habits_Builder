@@ -16,7 +16,7 @@
   "AddedHabit": "➕ Abitudine aggiunta: {0}",
   "NoHabitsYet": "Nessuna abitudine per il momento.",
   "YourHabits": "📋 Le Tue Abitudini:",
-  "HabitLineFormat": "{0}. {1} - Serie attuale: {2}",
+  "HabitLineFormat": "{0}. {1} - Serie attuale: {2} {3} - Max serie: {4}",
   "SelectHabitComplete": "Seleziona il numero dell'abitudine da segnare come completata: ",
   "InvalidHabitNumber": "❌ Numero dell'abitudine non valido.",
   "SelectHabitHistory": "Seleziona il numero dell'abitudine per vedere la storia: ",

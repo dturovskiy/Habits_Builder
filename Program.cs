@@ -36,6 +36,7 @@ namespace HabitTrackerApp
                 Console.WriteLine(LocalizationService.GetString("MenuMarkComplete"));
                 Console.WriteLine(LocalizationService.GetString("MenuViewHistory"));
                 Console.WriteLine(LocalizationService.GetString("MenuDeleteHabit"));
+                Console.WriteLine(LocalizationService.GetString("MenuResetHabit"));
                 Console.WriteLine(LocalizationService.GetString("MenuSetReminders"));
                 Console.WriteLine(LocalizationService.GetString("MenuChangeLanguage"));
                 Console.WriteLine($"{LocalizationService.GetString("MenuToggleTheme")} {ThemeService.GetThemeIcon()}");
@@ -61,19 +62,22 @@ namespace HabitTrackerApp
                     case "5": 
                         DeleteHabit(); 
                         break;
-                    case "6": 
-                        SetEmailReminders(); 
+                    case "6":
+                        ResetHabit();
                         break;
                     case "7": 
-                        await ChangeLanguageAsync(); 
+                        SetEmailReminders(); 
                         break;
                     case "8": 
-                        ThemeService.ToggleTheme();
+                        await ChangeLanguageAsync(); 
                         break;
                     case "9": 
-                        await SyncToGoogleCalendar();
+                        ThemeService.ToggleTheme();
                         break;
                     case "10": 
+                        await SyncToGoogleCalendar();
+                        break;
+                    case "11": 
                         await ExitApplication();
                         return;
                     default:
@@ -144,20 +148,24 @@ namespace HabitTrackerApp
 
             Console.WriteLine(LocalizationService.GetString("YourHabits"));
             Console.WriteLine(new string('-', 50));
-            
+
             for (int i = 0; i < habits.Count; i++)
             {
-                var streak = habits[i].CurrentStreak();
+                var streak = habits[i].CurrentStreak;
+                var maxStreak = habits[i].MaxStreak;
                 var streakEmoji = streak > 0 ? "🔥" : "⭕";
                 var line = string.Format(
                     LocalizationService.GetString("HabitLineFormat"),
                     i + 1,
                     habits[i].Name,
                     streak,
-                    streakEmoji
+                    streakEmoji,
+                    maxStreak
                 );
+
                 Console.WriteLine(line);
             }
+
             Console.WriteLine(new string('-', 50));
         }
 
@@ -177,7 +185,7 @@ namespace HabitTrackerApp
                 var habit = habits[index - 1];
                 habit.MarkComplete();
                 Storage.Save(habits);
-                Console.WriteLine(string.Format(LocalizationService.GetString("HabitMarkedComplete"), habit.Name));
+                Console.WriteLine(string.Format(LocalizationService.GetString("HabitMarkedComplete"), habit.Name, "today"));
             }
             else
             {
@@ -234,6 +242,41 @@ namespace HabitTrackerApp
                 else
                 {
                     Console.WriteLine(LocalizationService.GetString("DeleteCancelled"));
+                }
+            }
+            else
+            {
+                Console.WriteLine(LocalizationService.GetString("InvalidHabitNumber"));
+            }
+        }
+
+        static void ResetHabit()
+        {
+            ViewHabits();
+
+            if (habits.Count == 0)
+                return;
+
+            Console.WriteLine();
+            Console.Write(LocalizationService.GetString("SelectHabitReset"));
+            var input = Console.ReadLine();
+
+            if (int.TryParse(input, out int index) && index >= 1 && index <= habits.Count)
+            {
+                var habitName = habits[index - 1].Name;
+
+                Console.Write(string.Format(LocalizationService.GetString("ConfirmReset"), habitName));
+                var confirmation = Console.ReadLine()?.ToLower();
+
+                if (confirmation == "y" || confirmation == "yes" || confirmation == LocalizationService.GetString("Yes").ToLower())
+                {
+                    habits[index -1].ResetCurrentStreak();
+                    Console.WriteLine(string.Format(LocalizationService.GetString("ResetedHabit"), habitName));
+                    Storage.Save(habits);
+                }
+                else
+                {
+                    Console.WriteLine(LocalizationService.GetString("ResetCancelled"));
                 }
             }
             else
