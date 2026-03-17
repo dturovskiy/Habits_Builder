@@ -66,16 +66,25 @@ namespace HabitTrackerApp
 
         static async Task ChangeLanguageAsync()
         {
-            var languages = LanguageService.GetLanguages();
-
             Console.WriteLine();
             Console.WriteLine(LocalizationService.GetString("MenuChangeLanguage") + ":");
             Console.WriteLine();
 
+            var languages = LanguageService.GetLanguages();
+            var auditResults = await LocalizationAuditService.AuditAllAsync();
+            var auditMap = auditResults.ToDictionary(x => x.LanguageCode, x => x);
+
             int i = 1;
             foreach (var lang in languages)
             {
-                Console.WriteLine($"{i}. {lang.Value} ({lang.Key})");
+                string status = string.Empty;
+
+                if (lang.Key != "en" && auditMap.TryGetValue(lang.Key, out var audit) && audit.NeedsUpdate)
+                {
+                    status = $"⚠️ [needs update: {audit.MissingCount + audit.EmptyCount}]";
+                }
+
+                Console.WriteLine($"{i}. {lang.Value} ({lang.Key}){status}");
                 i++;
             }
             Console.WriteLine();
